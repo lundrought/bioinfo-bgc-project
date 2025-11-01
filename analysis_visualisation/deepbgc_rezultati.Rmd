@@ -1,0 +1,386 @@
+---
+title: "deepbgc_rezultati"
+author: "Lun Suša"
+date: "2024-12-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+
+```{r}
+datoteka <- "deepbgc_rezultati.csv"
+podatki <- read_csv(datoteka)
+
+#head(podatki)
+#summary(podatki)
+#glimpse(podatki)
+```
+
+
+```{r}
+stevilo_bgc <- podatki %>%
+  group_by(filename) %>%
+  summarise(bgc_n = n()) %>%
+  arrange(desc(bgc_n))
+
+#stevilo_bgc
+
+```
+
+
+```{r}
+delitev_po_razredih <- podatki %>%
+  group_by(product_class) %>%
+  summarise(bgc_n = n())%>%
+  arrange(desc(bgc_n))
+
+delitev_po_aktivnosti <- podatki %>%
+  group_by(product_activity) %>%
+  summarise(bgc_n = n())%>%
+  arrange(desc(bgc_n))
+
+delitev_po_razredih
+delitev_po_aktivnosti
+            
+```
+
+
+```{r}
+razred_in_aktivnost <- podatki %>%
+  group_by(product_class, product_activity) %>%
+  summarise(bgc_n = n()) %>%
+  arrange(desc(bgc_n))
+
+skupno_filtrirano <- razred_in_aktivnost %>%
+  filter(product_class != "no confident class" & product_activity != "no confident class")
+
+#skupno_filtrirano
+
+
+
+```
+
+```{r}
+
+ggplot(skupno_filtrirano, aes(x = product_class, y = bgc_n, fill = product_activity)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Število BGC-jev po razredih in aktivnosti",
+       x = "Razred",
+       y = "Števlo",
+       fill = "Aktivnost") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+```{r}
+skupno_po_dat <- podatki %>%
+  group_by(filename, product_class, product_activity) %>%
+  filter(product_class != "no confident class" & product_activity != "no confident class") %>%
+  summarise(bgc_n = n()) %>%
+  arrange(desc(bgc_n))
+
+#skupno_po_dat
+
+```
+
+```{r}
+ggplot(skupno_po_dat, aes(x = filename, y = bgc_n, fill = product_class)) +
+  geom_bar(stat = "identity") +
+  labs(title = "BGCji po genomih in razredih",
+       x = "Genom",
+       y = "Število BGC",
+       fill = "Razred") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+
+
+**EXF_* **
+
+```{r}
+podatkiEXF <- podatki %>% filter(str_starts(filename, "EXF"))
+
+
+#head(podatkiEXF)
+#glimpse(podatkiEXF)
+
+
+```
+
+```{r}
+stevilo_bgc <- podatkiEXF %>%
+  group_by(filename) %>%
+  summarise(bgc_n = n()) %>%
+  arrange(desc(bgc_n))
+
+#stevilo_bgc
+
+```
+```{r}
+delitev_po_razredih <- podatkiEXF %>%
+  group_by(product_class) %>%
+  summarise(bgc_n = n())%>%
+  arrange(desc(bgc_n))
+
+delitev_po_aktivnosti <- podatkiEXF %>%
+  group_by(product_activity) %>%
+  summarise(bgc_n = n())%>%
+  arrange(desc(bgc_n))
+
+delitev_po_razredih
+delitev_po_aktivnosti
+```
+
+
+
+
+```{r}
+razred_in_aktivnost <- podatkiEXF %>%
+  group_by(product_class, product_activity) %>%
+  summarise(bgc_n = n()) %>%
+  arrange(desc(bgc_n))
+
+skupno_filtrirano <- razred_in_aktivnost %>%
+  filter(product_class != "no confident class" & product_activity != "no confident class")
+
+#skupno_filtrirano
+
+
+
+```
+
+```{r}
+
+ggplot(skupno_filtrirano, aes(x = product_class, y = bgc_n, fill = product_activity)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Število BGC-jev po razredih in aktivnosti",
+       x = "Razred",
+       y = "Števlo",
+       fill = "Aktivnost") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+```{r}
+skupno_po_dat <- podatkiEXF %>%
+  group_by(filename, product_class, product_activity) %>%
+  filter(product_class != "no confident class" & product_activity != "no confident class") %>%
+  summarise(bgc_n = n()) %>%
+  arrange(desc(bgc_n))
+
+#skupno_po_dat
+
+```
+
+```{r}
+ggplot(skupno_po_dat, aes(x = filename, y = bgc_n, fill = product_class)) +
+  geom_bar(stat = "identity") +
+  labs(title = "BGCji po genomih in razredih",
+       x = "Genom",
+       y = "Število BGC",
+       fill = "Razred") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+
+
+
+
+
+**GCA_* **
+
+
+```{r}
+
+podatkiGCA<- podatki %>% filter(str_starts(filename, "GCA"))
+
+#head(podatki)
+#summary(podatki)
+#glimpse(podatki)
+```
+
+
+```{r}
+stevilo_bgc <- podatkiGCA %>%
+  group_by(filename) %>%
+  summarise(bgc_n = n()) %>%
+  arrange(desc(bgc_n))
+
+#stevilo_bgc
+
+```
+
+
+```{r}
+delitev_po_razredih <- podatkiGCA %>%
+  group_by(product_class) %>%
+  summarise(bgc_n = n())%>%
+  arrange(desc(bgc_n))
+
+delitev_po_aktivnosti <- podatkiGCA %>%
+  group_by(product_activity) %>%
+  summarise(bgc_n = n())%>%
+  arrange(desc(bgc_n))
+
+#delitev_po_razredih
+#delitev_po_aktivnosti
+            
+```
+
+
+```{r}
+razred_in_aktivnost <- podatkiGCA %>%
+  group_by(product_class, product_activity) %>%
+  summarise(bgc_n = n()) %>%
+  arrange(desc(bgc_n))
+
+skupno_filtrirano <- razred_in_aktivnost %>%
+  filter(product_class != "no confident class" & product_activity != "no confident class")
+
+#skupno_filtrirano
+
+
+
+```
+
+```{r}
+
+ggplot(skupno_filtrirano, aes(x = product_class, y = bgc_n, fill = product_activity)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Število BGC-jev po razredih in aktivnosti",
+       x = "Razred",
+       y = "Števlo",
+       fill = "Aktivnost") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+```{r}
+skupno_po_dat <- podatkiGCA %>%
+  group_by(filename, product_class, product_activity) %>%
+  filter(product_class != "no confident class" & product_activity != "no confident class") %>%
+  summarise(bgc_n = n()) %>%
+  arrange(desc(bgc_n))
+
+#skupno_po_dat
+
+```
+
+```{r}
+ggplot(skupno_po_dat, aes(x = filename, y = bgc_n, fill = product_class)) +
+  geom_bar(stat = "identity") +
+  labs(title = "BGCji po genomih in razredih",
+       x = "Genom",
+       y = "Število BGC",
+       fill = "Razred") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+
+** ASPERGILLUS **
+
+
+```{r}
+datoteka <- "deepbgc_rezultati.csv"
+podatkiAsp <- podatki %>% filter(str_starts(filename, "Aspergillus"))
+
+#head(podatki)
+#summary(podatki)
+#glimpse(podatki)
+```
+
+
+```{r}
+stevilo_bgc <- podatkiAsp %>%
+  group_by(filename) %>%
+  summarise(bgc_n = n()) %>%
+  arrange(desc(bgc_n))
+
+#stevilo_bgc
+
+```
+
+
+```{r}
+delitev_po_razredih <- podatkiAsp %>%
+  group_by(product_class) %>%
+  summarise(bgc_n = n())%>%
+  arrange(desc(bgc_n))
+
+delitev_po_aktivnosti <- podatkiAsp %>%
+  group_by(product_activity) %>%
+  summarise(bgc_n = n())%>%
+  arrange(desc(bgc_n))
+
+#delitev_po_razredih
+#delitev_po_aktivnosti
+            
+```
+
+
+```{r}
+razred_in_aktivnost <- podatkiAsp %>%
+  group_by(product_class, product_activity) %>%
+  summarise(bgc_n = n()) %>%
+  arrange(desc(bgc_n))
+
+skupno_filtrirano <- razred_in_aktivnost %>%
+  filter(product_class != "no confident class" & product_activity != "no confident class")
+
+#skupno_filtrirano
+
+
+
+```
+
+```{r}
+
+ggplot(skupno_filtrirano, aes(x = product_class, y = bgc_n, fill = product_activity)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Število BGC-jev po razredih in aktivnosti",
+       x = "Razred",
+       y = "Števlo",
+       fill = "Aktivnost") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+```{r}
+skupno_po_dat <- podatkiAsp %>%
+  group_by(filename, product_class, product_activity) %>%
+  filter(product_class != "no confident class" & product_activity != "no confident class") %>%
+  summarise(bgc_n = n()) %>%
+  arrange(desc(bgc_n))
+
+#skupno_po_dat
+
+```
+
+```{r}
+ggplot(skupno_po_dat, aes(x = filename, y = bgc_n, fill = product_class)) +
+  geom_bar(stat = "identity") +
+  labs(title = "BGCji po genomih in razredih",
+       x = "Genom",
+       y = "Število BGC",
+       fill = "Razred") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
